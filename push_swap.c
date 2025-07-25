@@ -3,26 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbaldes <nbaldes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:46:55 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/24 15:05:13 by nbaldes          ###   ########.fr       */
+/*   Updated: 2025/07/25 12:04:00 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-// create the stack // FULLY DONE
-int	main(int argc, char **argv)
+void push_swap_main(t_struct *env)
 {
-	t_struct	env;
+	int size;
+	
+	if (is_sorted(env->head_a))
+		return;
+	size = stack_size(env->head_a);
+	if (size == 2)
+		sort_two(env);
+	else if (size == 3)
+		sort_three(env);
+	else
+		turk_algorithm(env);
+}
+
+int main(int argc, char **argv)
+{
+	t_struct env;
 
 	init_var(&env);
 	if (!env.cost)
 		return (1);
-	env.cost->cost_a = INT_MAX;
-	env.cost->cost_b = INT_MAX;
-	(void)env.head_b;
 	if (argc < 2)
 		return (1);
 	if (fill_double_chain(&env, argv))
@@ -30,39 +41,15 @@ int	main(int argc, char **argv)
 	if (check_same_nbr(&env))
 		return (write(1, "Error\n", 6));
 	calculate_tail(&env);
-	if (argc == 3)
-		sort_two(&env);
-	if (argc == 4)
-		sort_tree(&env);
-	if (argc > 4)
-	{
-		fill_stack_b(&env);
-		env.tmp_b = env.head_b;
-		while (env.tmp_b)
-		{
-			calculate_cost(&env);
-			push_back(&env);
-			env.tmp_b = env.head_b;
-		}
-	}
-	update_index_a(&env);
-	update_index_b(&env);
-	calculate_tail(&env);
+	push_swap_main(&env);
 	env.tmp = env.head_a;
 	while (env.tmp)
 	{
-		printf("le noeud numero stack_a %i contient la valeur %i\n",
-			env.tmp->index, env.tmp->value);
+		printf("a l index %i il y as la valeur %i\n",env.tmp->index, env.tmp->value);
 		env.tmp = env.tmp->next;
 	}
-	printf("\n");
-	env.tmp_b = env.head_b;
-	while (env.tmp_b)
-	{
-		printf("le noeud numero stack_b %i contient la valeur %i\n",
-			env.tmp_b->index, env.tmp_b->value);
-		env.tmp_b = env.tmp_b->next;
-	}
+	ft_free_lst(&env);
+	free(env.cost);
 	return (0);
 }
 
