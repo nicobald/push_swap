@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:08:03 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 11:55:27 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 22:49:05 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	swap(t_stack **head, char stack_id)
 		write(1, "sb\n", 3);
 	return (0);
 }
+
 int	push(t_stack **head_source, t_stack **head_dest, char stack_id)
 {
 	t_stack *tmp;

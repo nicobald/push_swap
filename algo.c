@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:46:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 10:02:51 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 23:06:58 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,50 @@ void sort_three(t_struct *env)
 		swap(&env->head_a, env->a);
 		rotate(&env->head_a, &env->tail_a, env->a);
 	}
+}
+
+void sort_four_five(t_struct *env)
+{
+	int min;
+	int max;
+
+
+	if (stack_size(env->head_a) == 5)
+		push(&env->head_a, &env->head_b, env->b);
+	push(&env->head_a, &env->head_b, env->b);
+	sort_three(env);
+	min = find_min(env->head_a)->value;
+	max = find_max(env->head_a)->value;
+	while (env->head_b)
+	{
+		if (env->head_b->value > min && env->head_b->value < max)
+		{
+			if (env->head_a->value > env->head_b->value && env->tail_a->value < env->head_b->value)
+				push(&env->head_b, &env->head_a, env->a);
+			else
+				rotate(&env->head_a, &env->tail_a, env->a);
+		}
+		else if (env->head_b->value < min)
+		{
+			if (env->head_a->value == min)
+				push(&env->head_b, &env->head_a, env->a);
+			else
+				rotate(&env->head_a, &env->tail_a, env->a);
+		}
+		else if (env->head_b->value > max)
+		{
+			if (env->head_a->value == max)
+			{
+				rotate(&env->head_a, &env->tail_a, env->a);
+				push(&env->head_b, &env->head_a, env->a);
+			}
+			else
+				rotate(&env->head_a, &env->tail_a, env->a);
+		}
+	}
+	while (env->head_a->value != min)
+		rotate(&env->head_a, &env->tail_a, env->a);
+	return ;
 }
 
 int stack_size(t_stack *stack)
@@ -86,6 +130,25 @@ t_stack *find_min(t_stack *stack)
 		stack = stack->next;
 	}
 	return (min_node);
+}
+
+t_stack *find_max(t_stack *stack)
+{
+	t_stack *max_node;
+	int max_value;
+
+	max_node = stack;
+	max_value = stack->value;
+	while (stack)
+	{
+		if (stack->value > max_value)
+		{
+			max_value = stack->value;
+			max_node = stack;
+		}
+		stack = stack->next;
+	}
+	return (max_node);
 }
 
 int get_position(t_stack *stack, t_stack *target)
@@ -413,12 +476,14 @@ void algorithm(t_struct *env)
 	size = stack_size(env->head_a);
 	if (is_sorted(env->head_a))
 		return;
-	if (size <= 3)
+	if (size <= 5)
 	{
 		if (size == 2)
 			sort_two(env);
 		else if (size == 3)
 			sort_three(env);
+		else if (size == 4 || size == 5)
+			sort_four_five(env);
 		return;
 	}
 	sort_push(env);

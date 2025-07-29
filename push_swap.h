@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:47:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 09:46:56 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 22:48:20 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void sort_two(t_struct *env);
 int stack_size(t_stack *stack);
 int is_sorted(t_stack *stack);
 t_stack *find_min(t_stack *stack);
+t_stack *find_max(t_stack *stack);
 int get_position(t_stack *stack, t_stack *target);
 int *sort_array(t_stack *stack, int size);
 void sort_push(t_struct *env);

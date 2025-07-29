@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:46:55 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 10:04:26 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 23:04:10 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int main(int argc, char **argv)
 		return (write(1, "Error\n", 6));
 	calculate_tail(&env);
 	algorithm(&env);
-	env.tmp = env.head_a;
-	while (env.tmp)
-	{
-		printf("a l index %i il y as la valeur %i\n",env.tmp->index, env.tmp->value);
-		env.tmp = env.tmp->next;
-	}
+	// env.tmp = env.head_a;
+	// while (env.tmp)
+	// {
+	// 	printf("a l index %i il y as la valeur %i\n",env.tmp->index, env.tmp->value);
+	// 	env.tmp = env.tmp->next;
+	// }
 	ft_free_lst(&env);
 	free(env.cost);
 	return (0);
