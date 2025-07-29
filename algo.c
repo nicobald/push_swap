@@ -6,11 +6,44 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:46:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 11:58:55 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 10:02:51 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void sort_two(t_struct *env)
+{
+	if (env->head_a->value > env->head_a->next->value)
+		swap(&env->head_a, env->a);
+}
+
+void sort_three(t_struct *env)
+{
+	int a;
+	int b;
+	int c;
+
+	a = env->head_a->value;
+	b = env->head_a->next->value;
+	c = env->head_a->next->next->value;
+	if (a > b && b < c && c > a)
+		swap(&env->head_a, env->a);
+	else if (a > b && b > c)
+	{
+		swap(&env->head_a, env->a);
+		reverse_rotate(&env->head_a, &env->tail_a, env->a);
+	}
+	else if (a < b && b > c && c > a)
+		reverse_rotate(&env->head_a, &env->tail_a, env->a);
+	else if (a > b && b < c && c < a)
+		rotate(&env->head_a, &env->tail_a, env->a);
+	else if (a < b && b > c && c < a)
+	{
+		swap(&env->head_a, env->a);
+		rotate(&env->head_a, &env->tail_a, env->a);
+	}
+}
 
 int stack_size(t_stack *stack)
 {
@@ -41,10 +74,8 @@ t_stack *find_min(t_stack *stack)
 	t_stack *min_node;
 	int min_value;
 
-	if (!stack)
-		return (NULL);
-	min_value = stack->value;
 	min_node = stack;
+	min_value = stack->value;
 	while (stack)
 	{
 		if (stack->value < min_value)
@@ -55,27 +86,6 @@ t_stack *find_min(t_stack *stack)
 		stack = stack->next;
 	}
 	return (min_node);
-}
-
-t_stack *find_max(t_stack *stack)
-{
-	t_stack *max_node;
-	int max_value;
-
-	if (!stack)
-		return (NULL);
-	max_value = stack->value;
-	max_node = stack;
-	while (stack)
-	{
-		if (stack->value > max_value)
-		{
-			max_value = stack->value;
-			max_node = stack;
-		}
-		stack = stack->next;
-	}
-	return (max_node);
 }
 
 int get_position(t_stack *stack, t_stack *target)
@@ -91,188 +101,291 @@ int get_position(t_stack *stack, t_stack *target)
 	return (pos);
 }
 
-void sort_two(t_struct *env)
+int *sort_array(t_stack *stack, int size)
 {
-	if (env->head_a->value > env->head_a->next->value)
-		swap(&env->head_a, env->a);
+    int *arr;
+    int i;
+    int j;
+    int temp;
+    t_stack *current;
+
+    arr = malloc(sizeof(int) * size);
+    i = 0;
+    current = stack;
+    while (current && i < size)
+    {
+        arr[i++] = current->value;
+        current = current->next;
+    }
+    i = 0;
+    while (i < size - 1)
+    {
+        j = 0;
+        while (j < size - 1 - i)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+            j++;
+        }
+        i++;
+    }  
+    return (arr);
 }
 
-void sort_three(t_struct *env)
+void sort_push(t_struct *env)
 {
-	int first;
-	int second;
-	int third;
+    int total_size;
+    int *sorted_vals;
+    int chunk_size;
+    int pushed;
+    int target_push;
+    int chunk;
+    int chunk_min;
+    int chunk_max;
+    int initial_size_a;
+    int rotations;
 
-	first = env->head_a->value;
-	second = env->head_a->next->value;
-	third = env->head_a->next->next->value;
+    total_size = stack_size(env->head_a);
+    sorted_vals = sort_array(env->head_a, total_size);
+    chunk_size = total_size / 7;
+    pushed = 0;
+    target_push = total_size - 3;
+    chunk = 0;
 
-	if (first > second && second < third && third > first)
-		swap(&env->head_a, env->a);
-	else if (first > second && second > third && third < first)
-	{
-		swap(&env->head_a, env->a);
-		reverse_rotate(&env->head_a, &env->tail_a, env->a);
-	}
-	else if (first < second && second > third && third > first)
-		reverse_rotate(&env->head_a, &env->tail_a, env->a);
-	else if (first > second && second < third && third < first)
-		rotate(&env->head_a, &env->tail_a, env->a);
-	else if (first < second && second > third && third < first)
-	{
-		swap(&env->head_a, env->a);
-		rotate(&env->head_a, &env->tail_a, env->a);
-	}
+    while (chunk < 6 && pushed < target_push)
+    {
+        chunk_min = sorted_vals[chunk * chunk_size];
+        if (chunk == 5)
+            chunk_max = sorted_vals[total_size - 4];
+        else
+            chunk_max = sorted_vals[(chunk + 1) * chunk_size - 1];
+        
+        initial_size_a = stack_size(env->head_a);
+        rotations = 0;
+        
+        while (rotations < initial_size_a && pushed < target_push)
+        {
+            if (env->head_a->value >= chunk_min && env->head_a->value <= chunk_max)
+            {
+                push(&env->head_a, &env->head_b, env->b);
+                calculate_tail(env);
+                pushed++;
+            }
+            else
+            {
+                rotate(&env->head_a, &env->tail_a, env->a);
+                calculate_tail(env);
+            }
+            rotations++;
+        }
+        chunk++;
+    }
+    free(sorted_vals);
 }
 
-void push_all_but_three(t_struct *env)
+t_stack *find_pos(t_stack *stack_a, int value_b)
 {
-	int size;
-	int pushed;
-
-	size = stack_size(env->head_a);
-	pushed = 0;
-
-	while (size > 3 && pushed < size - 3)
-	{
-		push(&env->head_a, &env->head_b, env->b);
-		calculate_tail(env);
-		pushed++;
-	}
-}
-
-t_stack *find_target_in_a(t_stack *stack_a, int value_b)
-{
-	t_stack *target;
+	t_stack *best_target;
 	t_stack *current;
-	int closest_bigger;
+	int min_diff;
+	int diff;
 
-	target = NULL;
-	closest_bigger = INT_MAX;
+	best_target = NULL;
 	current = stack_a;
-
+	min_diff = INT_MAX;
 	while (current)
 	{
-		if (current->value > value_b && current->value < closest_bigger)
+		if (current->value > value_b)
 		{
-			closest_bigger = current->value;
-			target = current;
+			diff = current->value - value_b;
+			if (diff < min_diff)
+			{
+				min_diff = diff;
+				best_target = current;
+			}
 		}
 		current = current->next;
 	}
-	if (!target)
-		target = find_min(stack_a);
-
-	return (target);
+	if (!best_target)
+		best_target = find_min(stack_a);
+	return (best_target);
 }
 
-t_move_cost calculate_move_cost(t_struct *env, t_stack *node_b)
+t_move_info calculate_cost(t_struct *env, t_stack *node_b)
 {
-	t_move_cost cost;
-	t_stack *target_a;
-	int pos_a;
-	int pos_b;
+	t_move_info info;
 	int size_a;
 	int size_b;
+	int pos_a;
+	int pos_b;
 
-	target_a = find_target_in_a(env->head_a, node_b->value);
-	pos_a = get_position(env->head_a, target_a);
-	pos_b = get_position(env->head_b, node_b);
+	info.node_b = node_b;
+	info.target_a = find_pos(env->head_a, node_b->value);
 	size_a = stack_size(env->head_a);
 	size_b = stack_size(env->head_b);
+	pos_a = get_position(env->head_a, info.target_a);
+	pos_b = get_position(env->head_b, node_b);
 	if (pos_a <= size_a / 2)
 	{
-		cost.cost_a = pos_a;
-		cost.rotate_a = 1;
+		info.cost_a = pos_a;
+		info.dir_a = 1;
 	}
 	else
 	{
-		cost.cost_a = size_a - pos_a;
-		cost.rotate_a = 0;
+		info.cost_a = size_a - pos_a;
+		info.dir_a = 0;
 	}
 	if (pos_b <= size_b / 2)
 	{
-		cost.cost_b = pos_b;
-		cost.rotate_b = 1;
+		info.cost_b = pos_b;
+		info.dir_b = 1;
 	}
 	else
 	{
-		cost.cost_b = size_b - pos_b;
-		cost.rotate_b = 0;
+		info.cost_b = size_b - pos_b;
+		info.dir_b = 0;
 	}
-	cost.total_cost = cost.cost_a + cost.cost_b;
-	return (cost);
+	info.can_combine = (info.dir_a == info.dir_b);
+
+	if (info.can_combine)
+	{
+		int combined_moves = (info.cost_a > info.cost_b) ? info.cost_a : info.cost_b;
+		info.total_cost = combined_moves;
+	}
+	else
+	{
+		info.total_cost = info.cost_a + info.cost_b;
+	}
+	return (info);
 }
 
-t_stack *find_cheapest_move(t_struct *env, t_move_cost *best_cost)
+t_move_info best_move(t_struct *env)
 {
-	t_stack *current_b;
-	t_stack *cheapest_node;
-	t_move_cost current_cost;
-
-	current_b = env->head_b;
-	cheapest_node = current_b;
-	*best_cost = calculate_move_cost(env, current_b);
+	t_stack *current_b = env->head_b;
+	t_move_info best_move;
+	int first = 1;
 
 	while (current_b)
 	{
-		current_cost = calculate_move_cost(env, current_b);
-		if (current_cost.total_cost < best_cost->total_cost)
+		t_move_info current_move = calculate_cost(env, current_b);
+
+		if (first || current_move.total_cost < best_move.total_cost)
 		{
-			*best_cost = current_cost;
-			cheapest_node = current_b;
+			best_move = current_move;
+			first = 0;
 		}
 		current_b = current_b->next;
 	}
 
-	return (cheapest_node);
+	return (best_move);
 }
 
-void execute_rotations(t_struct *env, t_move_cost cost)
+void combine_move(t_struct *env, t_move_info move)
 {
-	if (cost.rotate_a == cost.rotate_b)
+    int combined;
+    int i;
+
+    if (move.can_combine)
+    {
+        if (move.cost_a < move.cost_b)
+            combined = move.cost_a;
+        else
+            combined = move.cost_b;
+        
+        i = 0;
+        while (i < combined)
+        {
+            if (move.dir_a)
+                double_rotate(env, env->c);
+            else
+                double_reverse_rotate(env, env->c);
+            calculate_tail(env);
+            i++;
+        }
+        move.cost_a -= combined;
+        move.cost_b -= combined;
+    }
+    
+    while (move.cost_a > 0)
+    {
+        if (move.dir_a)
+            rotate(&env->head_a, &env->tail_a, env->a);
+        else
+            reverse_rotate(&env->head_a, &env->tail_a, env->a);
+        move.cost_a--;
+        calculate_tail(env);
+    }
+    
+    while (move.cost_b > 0)
+    {
+        if (move.dir_b)
+            rotate(&env->head_b, &env->tail_b, env->b);
+        else
+            reverse_rotate(&env->head_b, &env->tail_b, env->b);
+        move.cost_b--;
+        calculate_tail(env);
+    }
+}
+
+void final_sort(t_struct *env)
+{
+	int size_b;
+	while (env->head_b)
 	{
-		while (cost.cost_a > 0 && cost.cost_b > 0)
+		size_b = stack_size(env->head_b);
+		if (size_b <= 5)
 		{
-			if (cost.rotate_a)
-				double_rotate(env, env->c);
+			t_stack *max_b = env->head_b;
+			t_stack *current = env->head_b;
+
+			while (current)
+			{
+				if (current->value > max_b->value)
+					max_b = current;
+				current = current->next;
+			}
+
+			int pos_max = get_position(env->head_b, max_b);
+			if (pos_max <= size_b / 2)
+			{
+				while (env->head_b != max_b)
+				{
+					rotate(&env->head_b, &env->tail_b, env->b);
+					calculate_tail(env);
+				}
+			}
 			else
-				double_reverse_rotate(env, env->c);
-			cost.cost_a--;
-			cost.cost_b--;
-			calculate_tail(env);
+			{
+				while (env->head_b != max_b)
+				{
+					reverse_rotate(&env->head_b, &env->tail_b, env->b);
+					calculate_tail(env);
+				}
+			}
 		}
-	}
-	while (cost.cost_a > 0)
-	{
-		if (cost.rotate_a)
-			rotate(&env->head_a, &env->tail_a, env->a);
-		else
-			reverse_rotate(&env->head_a, &env->tail_a, env->a);
-		cost.cost_a--;
-		calculate_tail(env);
-	}
-	while (cost.cost_b > 0)
-	{
-		if (cost.rotate_b)
-			rotate(&env->head_b, &env->tail_b, env->b);
-		else
-			reverse_rotate(&env->head_b, &env->tail_b, env->b);
-		cost.cost_b--;
+
+		t_move_info move = best_move(env);
+		combine_move(env, move);
+		push(&env->head_b, &env->head_a, env->a);
 		calculate_tail(env);
 	}
 }
 
-void final_rotation(t_struct *env)
+void final_rotate(t_struct *env)
 {
 	t_stack *min_node;
 	int min_pos;
 	int size;
-
+	
 	min_node = find_min(env->head_a);
 	min_pos = get_position(env->head_a, min_node);
 	size = stack_size(env->head_a);
-
+	if (is_sorted(env->head_a))
+		return;
 	if (min_pos <= size / 2)
 	{
 		while (min_pos > 0)
@@ -293,21 +406,26 @@ void final_rotation(t_struct *env)
 	}
 }
 
-void	turk_algorithm(t_struct *env)
+void algorithm(t_struct *env)
 {
-	t_move_cost	best_cost;
+	int size;
 
-	push_all_but_three(env);
+	size = stack_size(env->head_a);
+	if (is_sorted(env->head_a))
+		return;
+	if (size <= 3)
+	{
+		if (size == 2)
+			sort_two(env);
+		else if (size == 3)
+			sort_three(env);
+		return;
+	}
+	sort_push(env);
 	if (stack_size(env->head_a) == 3)
 		sort_three(env);
 	else if (stack_size(env->head_a) == 2)
 		sort_two(env);
-	while (env->head_b)
-	{
-		find_cheapest_move(env, &best_cost);
-		execute_rotations(env, best_cost);
-		push(&env->head_b, &env->head_a, env->a);
-		calculate_tail(env);
-	}
-	final_rotation(env);
+	final_sort(env);
+	final_rotate(env);
 }

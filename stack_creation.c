@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 10:20:07 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 11:55:49 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/28 19:27:01 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	init_var(t_struct *env)
 	env->a = 'a';
 	env->b = 'b';
 	env->c = 'c';
-	env->cost = malloc(sizeof(t_move_cost)); 
+	env->cost = malloc(sizeof(t_move_info)); 
 }
 t_stack	*ft_new_node(int value, int index)
 {

@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:47:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 11:56:43 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 09:46:56 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-typedef struct s_move_cost
-{
-	int cost_a;
-	int cost_b;
-	int total_cost;
-	int rotate_a;
-	int rotate_b;
-} t_move_cost;
+typedef struct s_chunk {
+    int min_val;
+    int max_val;
+    int priority;
+} t_chunk;
 
 typedef struct s_stack
 {
@@ -37,6 +34,17 @@ typedef struct s_stack
 	struct s_stack *next;
 	struct s_stack *prev;
 } t_stack;
+
+typedef struct s_move_info {
+    int cost_a;
+    int cost_b;
+    int total_cost;
+    int dir_a; 
+    int dir_b;
+    int can_combine; 
+    t_stack *target_a;
+    t_stack *node_b;
+} t_move_info;
 
 typedef struct s_struct
 {
@@ -48,7 +56,7 @@ typedef struct s_struct
 	t_stack *tail_a;
 	t_stack *tail_b;
 	t_stack *tmp_check_double;
-	t_move_cost *cost;
+	t_move_info *cost;
 	char **splited_nbr;
 	int index_argv;
 	int index_node_lst;
@@ -91,15 +99,16 @@ void sort_two(t_struct *env);
 int stack_size(t_stack *stack);
 int is_sorted(t_stack *stack);
 t_stack *find_min(t_stack *stack);
-t_stack *find_max(t_stack *stack);
 int get_position(t_stack *stack, t_stack *target);
-void push_all_but_three(t_struct *env);
-t_stack *find_target_in_a(t_stack *stack_a, int value_b);
-t_move_cost calculate_move_cost(t_struct *env, t_stack *node_b);
-t_stack *find_cheapest_move(t_struct *env, t_move_cost *best_cost);
-void execute_rotations(t_struct *env, t_move_cost cost);
-void final_rotation(t_struct *env);
-void turk_algorithm(t_struct *env);
+int *sort_array(t_stack *stack, int size);
+void sort_push(t_struct *env);
+t_stack *find_pos(t_stack *stack_a, int value_b);
+t_move_info calculate_cost(t_struct *env, t_stack *node_b);
+t_move_info best_move(t_struct *env);
+void combine_move(t_struct *env, t_move_info move);
+void final_sort(t_struct *env);
+void final_rotate(t_struct *env);
+void algorithm(t_struct *env);
 
 
 #endif

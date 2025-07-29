@@ -6,26 +6,11 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:46:55 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 12:04:00 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/29 10:04:26 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void push_swap_main(t_struct *env)
-{
-	int size;
-	
-	if (is_sorted(env->head_a))
-		return;
-	size = stack_size(env->head_a);
-	if (size == 2)
-		sort_two(env);
-	else if (size == 3)
-		sort_three(env);
-	else
-		turk_algorithm(env);
-}
 
 int main(int argc, char **argv)
 {
@@ -41,7 +26,7 @@ int main(int argc, char **argv)
 	if (check_same_nbr(&env))
 		return (write(1, "Error\n", 6));
 	calculate_tail(&env);
-	push_swap_main(&env);
+	algorithm(&env);
 	env.tmp = env.head_a;
 	while (env.tmp)
 	{
@@ -143,6 +128,7 @@ int	update_index_b(t_struct *env)
 	}
 	return (index);
 }
+
 int	update_index_a(t_struct *env)
 {
 	int	index;
