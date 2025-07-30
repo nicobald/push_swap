@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:47:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 22:48:20 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 13:54:01 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef struct s_struct
 	int index_argv;
 	int index_node_lst;
 	int i_splited;
+	int min;
+	int max;
 	int pos;
 	char a;
 	char b;
@@ -110,6 +112,7 @@ void combine_move(t_struct *env, t_move_info move);
 void final_sort(t_struct *env);
 void final_rotate(t_struct *env);
 void algorithm(t_struct *env);
-
+void sort_four_five_pars (t_struct *env);
+void sort_four_five (t_struct *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:46:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 23:06:58 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 13:52:33 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,35 +47,38 @@ void sort_three(t_struct *env)
 
 void sort_four_five(t_struct *env)
 {
-	int min;
-	int max;
-
-
 	if (stack_size(env->head_a) == 5)
 		push(&env->head_a, &env->head_b, env->b);
 	push(&env->head_a, &env->head_b, env->b);
 	sort_three(env);
-	min = find_min(env->head_a)->value;
-	max = find_max(env->head_a)->value;
+	env->min = find_min(env->head_a)->value;
+	env->max = find_max(env->head_a)->value;
 	while (env->head_b)
-	{
-		if (env->head_b->value > min && env->head_b->value < max)
+		sort_four_five_pars(env);
+	while (env->head_a->value != env->min)
+		rotate(&env->head_a, &env->tail_a, env->a);
+	return ;
+}
+
+void sort_four_five_pars (t_struct *env)
+{
+	if (env->head_b->value > env->min && env->head_b->value < env->max)
 		{
 			if (env->head_a->value > env->head_b->value && env->tail_a->value < env->head_b->value)
 				push(&env->head_b, &env->head_a, env->a);
 			else
 				rotate(&env->head_a, &env->tail_a, env->a);
 		}
-		else if (env->head_b->value < min)
+		else if (env->head_b->value < env->min)
 		{
-			if (env->head_a->value == min)
+			if (env->head_a->value == env->min)
 				push(&env->head_b, &env->head_a, env->a);
 			else
 				rotate(&env->head_a, &env->tail_a, env->a);
 		}
-		else if (env->head_b->value > max)
+		else if (env->head_b->value > env->max)
 		{
-			if (env->head_a->value == max)
+			if (env->head_a->value == env->max)
 			{
 				rotate(&env->head_a, &env->tail_a, env->a);
 				push(&env->head_b, &env->head_a, env->a);
@@ -83,10 +86,6 @@ void sort_four_five(t_struct *env)
 			else
 				rotate(&env->head_a, &env->tail_a, env->a);
 		}
-	}
-	while (env->head_a->value != min)
-		rotate(&env->head_a, &env->tail_a, env->a);
-	return ;
 }
 
 int stack_size(t_stack *stack)
@@ -164,6 +163,33 @@ int get_position(t_stack *stack, t_stack *target)
 	return (pos);
 }
 
+t_stack *find_pos(t_stack *stack_a, int value_b)
+{
+	t_stack *best_target;
+	t_stack *current;
+	int min_diff;
+	int diff;
+
+	best_target = NULL;
+	current = stack_a;
+	min_diff = INT_MAX;
+	while (current)
+	{
+		if (current->value > value_b)
+		{
+			diff = current->value - value_b;
+			if (diff < min_diff)
+			{
+				min_diff = diff;
+				best_target = current;
+			}
+		}
+		current = current->next;
+	}
+	if (!best_target)
+		best_target = find_min(stack_a);
+	return (best_target);
+}
 int *sort_array(t_stack *stack, int size)
 {
     int *arr;
@@ -250,33 +276,6 @@ void sort_push(t_struct *env)
     free(sorted_vals);
 }
 
-t_stack *find_pos(t_stack *stack_a, int value_b)
-{
-	t_stack *best_target;
-	t_stack *current;
-	int min_diff;
-	int diff;
-
-	best_target = NULL;
-	current = stack_a;
-	min_diff = INT_MAX;
-	while (current)
-	{
-		if (current->value > value_b)
-		{
-			diff = current->value - value_b;
-			if (diff < min_diff)
-			{
-				min_diff = diff;
-				best_target = current;
-			}
-		}
-		current = current->next;
-	}
-	if (!best_target)
-		best_target = find_min(stack_a);
-	return (best_target);
-}
 
 t_move_info calculate_cost(t_struct *env, t_stack *node_b)
 {
