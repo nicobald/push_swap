@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 22:19:14 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/07/30 23:41:27 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 23:54:52 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,24 @@ int	*sort_array(t_stack *stack, int size)
 	}
 	bubble_sort(arr, size);
 	return (arr);
+}
+
+void	exec_remaining(t_struct *env, t_move_info *move)
+{
+	while (move->cost_a-- > 0)
+	{
+		if (move->dir_a)
+			rotate(&env->head_a, &env->tail_a, env->a);
+		else
+			reverse_rotate(&env->head_a, &env->tail_a, env->a);
+		calculate_tail(env);
+	}
+	while (move->cost_b-- > 0)
+	{
+		if (move->dir_b)
+			rotate(&env->head_b, &env->tail_b, env->b);
+		else
+			reverse_rotate(&env->head_b, &env->tail_b, env->b);
+		calculate_tail(env);
+	}
 }

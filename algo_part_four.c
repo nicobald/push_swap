@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:12:18 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/07/30 23:42:57 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 23:54:55 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,6 @@ void	combine_move(t_struct *env, t_move_info move)
 		move.cost_b -= combined;
 	}
 	exec_remaining(env, &move);
-}
-
-void	exec_remaining(t_struct *env, t_move_info *move)
-{
-	while (move->cost_a-- > 0)
-	{
-		if (move->dir_a)
-			rotate(&env->head_a, &env->tail_a, env->a);
-		else
-			reverse_rotate(&env->head_a, &env->tail_a, env->a);
-		calculate_tail(env);
-	}
-	while (move->cost_b-- > 0)
-	{
-		if (move->dir_b)
-			rotate(&env->head_b, &env->tail_b, env->b);
-		else
-			reverse_rotate(&env->head_b, &env->tail_b, env->b);
-		calculate_tail(env);
-	}
 }
 
 void	final_sort(t_struct *env)
@@ -95,6 +75,16 @@ void	final_rotate(t_struct *env)
 	}
 }
 
+void sort_last_two(t_struct *env)
+{
+	reverse_rotate(&env->head_a, &env->tail_a, env->a);
+	reverse_rotate(&env->head_a, &env->tail_a, env->a);
+	swap(&env->head_a, env->a);
+	rotate(&env->head_a, &env->tail_a, env->a);
+	rotate(&env->head_a, &env->tail_a, env->a);
+	return ;
+}
+
 int	algorithm(t_struct *env)
 {
 	int	size;
@@ -120,12 +110,6 @@ int	algorithm(t_struct *env)
 	final_sort(env);
 	final_rotate(env);
 	if (!is_sorted(env->head_a))
-	{
-		reverse_rotate(&env->head_a, &env->tail_a, env->a);
-		reverse_rotate(&env->head_a, &env->tail_a, env->a);
-		swap(&env->head_a, env->a);
-		rotate(&env->head_a, &env->tail_a, env->a);
-		rotate(&env->head_a, &env->tail_a, env->a);
-	}
+		sort_last_two(env);
 	return (0);
 }

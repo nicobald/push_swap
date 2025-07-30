@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:47:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 23:39:51 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 23:52:47 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,6 @@ void				bubble_sort(int *arr, int size);
 void				sort_push_chunk(t_struct *env);
 void				calc_cost_dir(int size, int pos, int *cost, int *dir);
 void				exec_remaining(t_struct *env, t_move_info *move);
+void 				sort_last_two(t_struct *env);
 
 #endif
