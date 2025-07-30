@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbaldes <nbaldes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:47:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 14:19:56 by nbaldes          ###   ########.fr       */
+/*   Updated: 2025/07/30 23:39:51 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,26 @@ typedef struct s_struct
 	t_stack			*tmp_check_double;
 	t_move_info		*cost;
 	char			**splited_nbr;
-	int				index_argv;
-	int				index_node_lst;
-	int				i_splited;
-	int				min;
-	int				max;
-	int				pos;
 	char			a;
 	char			b;
 	char			c;
+	int				index_argv;
+	int				index_node_lst;
+	int				i_splited;
+	int				total_size;
+	int				*sorted_vals;
+	int				chunk_size;
+	int				pushed;
+	int				target_push;
+	int				min;
+	int				max;
+	int				chunk;
+	int				loop;
+	int				val;
+	int				size_a;
+	int				size_b;
+	int				pos;
+	int				pos_b;
 }					t_struct;
 
 size_t				ft_strlen(const char *str);
@@ -115,5 +126,10 @@ void				final_rotate(t_struct *env);
 int					algorithm(t_struct *env);
 void				sort_four_five_pars(t_struct *env);
 void				sort_four_five(t_struct *env);
+t_stack				*find_min_node(t_stack *a);
+void				bubble_sort(int *arr, int size);
+void				sort_push_chunk(t_struct *env);
+void				calc_cost_dir(int size, int pos, int *cost, int *dir);
+void				exec_remaining(t_struct *env, t_move_info *move);
 
 #endif

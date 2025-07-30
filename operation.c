@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:08:03 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/29 22:49:05 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 19:08:33 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	push(t_stack **head_source, t_stack **head_dest, char stack_id)
 		write(1, "pb\n", 3);
 	return (0);
 }
+
 int    rotate(t_stack **head, t_stack **tail, char stack_id)
 {
     t_stack    *tmp;
@@ -75,6 +76,7 @@ int    rotate(t_stack **head, t_stack **tail, char stack_id)
 		write(1, "rb\n", 3);
     return (0);
 }
+
 int	reverse_rotate(t_stack **head, t_stack **tail, char stack_id)
 {
 	t_stack *tmp;

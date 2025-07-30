@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   stack_creation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbaldes <nbaldes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 10:20:07 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 17:31:44 by nbaldes          ###   ########.fr       */
+/*   Updated: 2025/07/30 21:45:11 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	init_var(t_struct *env)
-{
-	env->index_argv = 1;
-	env->head_a = NULL;
-	env->head_b = NULL;
-	env->node = NULL;
-	env->pos = 0;
-	env->a = 'a';
-	env->b = 'b';
-	env->c = 'c';
-	env->cost = malloc(sizeof(t_move_info));
-}
 
 t_stack	*ft_new_node(int value, int index)
 {
@@ -63,6 +50,7 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
+
 long	ft_atol(const char *str)
 {
 	int		i;

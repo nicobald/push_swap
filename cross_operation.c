@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:06:12 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/25 11:55:31 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 21:54:15 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,3 @@ int double_reverse_rotate(t_struct *env, char stack_id)
 	write(1, "rrr\n", 4);
 	return(0);
 }
-

@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbaldes <nbaldes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:46:55 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 17:32:15 by nbaldes          ###   ########.fr       */
+/*   Updated: 2025/07/30 23:40:17 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void	init_var(t_struct *env)
+{
+	env->index_argv = 1;
+	env->head_a = NULL;
+	env->head_b = NULL;
+	env->node = NULL;
+	env->pos = 0;
+	env->a = 'a';
+	env->b = 'b';
+	env->c = 'c';
+	env->cost = malloc(sizeof(t_move_info));
+}
 
 int	check_same_nbr(t_struct *env)
 {
@@ -56,11 +69,8 @@ int	main(int argc, char **argv)
 		return (write(1, "Error\n", 6));
 	calculate_tail(&env);
 	algorithm(&env);
-	update_index_a(&env);
+	env.tmp = env.head_a;
 	ft_free_lst(&env);
 	free(env.cost);
 	return (0);
 }
-
-
-
