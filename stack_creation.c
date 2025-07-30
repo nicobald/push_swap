@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack_creation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
+/*   By: nbaldes <nbaldes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 10:20:07 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/28 19:27:01 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/30 17:31:44 by nbaldes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void	init_var(t_struct *env)
 	env->a = 'a';
 	env->b = 'b';
 	env->c = 'c';
-	env->cost = malloc(sizeof(t_move_info)); 
+	env->cost = malloc(sizeof(t_move_info));
 }
+
 t_stack	*ft_new_node(int value, int index)
 {
 	t_stack	*node;
@@ -65,7 +66,7 @@ int	ft_atoi(const char *str)
 long	ft_atol(const char *str)
 {
 	int		i;
-	int 	sign;
+	int		sign;
 	long	result;
 
 	i = 0;
@@ -119,10 +120,7 @@ int	fill_double_chain(t_struct *env, char **argv)
 				|| ft_atol(env->splited_nbr[env->index_node_lst]) < INT_MIN)
 				return (1);
 			if (check_nbr(env->splited_nbr))
-			{
-				ft_free_lst(env);
 				return (1);
-			}
 			env->node = ft_new_node(ft_atoi(env->splited_nbr[env->index_node_lst]),
 					env->pos);
 			ft_lstadd_back_double_chained(&env->head_a, env->node);
