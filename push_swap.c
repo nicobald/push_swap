@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:46:55 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 23:40:17 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/31 00:09:36 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	main(int argc, char **argv)
 		return (write(1, "Error\n", 6));
 	calculate_tail(&env);
 	algorithm(&env);
-	env.tmp = env.head_a;
 	ft_free_lst(&env);
 	free(env.cost);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:46:49 by nbaldes           #+#    #+#             */
-/*   Updated: 2025/07/30 23:55:38 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/31 00:09:24 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,47 +49,26 @@ void	sort_three(t_struct *env)
 
 void	sort_four_five(t_struct *env)
 {
-	if (stack_size(env->head_a) == 5)
+	while (stack_size(env->head_a) > 3)
+	{
+		env->min = find_min(env->head_a)->value;
+		while (env->head_a->value != env->min)
+			rotate(&env->head_a, &env->tail_a, env->a);
 		push(&env->head_a, &env->head_b, env->b);
-	push(&env->head_a, &env->head_b, env->b);
+	}
 	sort_three(env);
-	env->min = find_min(env->head_a)->value;
-	env->max = find_max(env->head_a)->value;
 	while (env->head_b)
-		sort_four_five_pars(env);
-	while (env->head_a->value != env->min)
+	{
+		env->node = find_pos(env->head_a, env->head_b->value);
+		env->pos = get_position(env->head_a, env->node);
+		while (env->head_a->value != env->node->value)
+			rotate(&env->head_a, &env->tail_a, env->a);
+		push(&env->head_b, &env->head_a, env->a);
+	}
+	while (!is_sorted(env->head_a))
 		rotate(&env->head_a, &env->tail_a, env->a);
-	return ;
 }
 
-void	sort_four_five_pars(t_struct *env)
-{
-	if (env->head_b->value > env->min && env->head_b->value < env->max)
-	{
-		if (env->head_a->value > env->head_b->value
-			&& env->tail_a->value < env->head_b->value)
-			push(&env->head_b, &env->head_a, env->a);
-		else
-			rotate(&env->head_a, &env->tail_a, env->a);
-	}
-	else if (env->head_b->value < env->min)
-	{
-		if (env->head_a->value == env->min)
-			push(&env->head_b, &env->head_a, env->a);
-		else
-			rotate(&env->head_a, &env->tail_a, env->a);
-	}
-	else if (env->head_b->value > env->max)
-	{
-		if (env->head_a->value == env->max)
-		{
-			rotate(&env->head_a, &env->tail_a, env->a);
-			push(&env->head_b, &env->head_a, env->a);
-		}
-		else
-			rotate(&env->head_a, &env->tail_a, env->a);
-	}
-}
 
 int	stack_size(t_stack *stack)
 {

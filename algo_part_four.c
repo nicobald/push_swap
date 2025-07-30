@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:12:18 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/07/30 23:54:55 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/07/31 00:00:45 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,19 @@ void	combine_move(t_struct *env, t_move_info move)
 
 	if (move.can_combine)
 	{
-		combined = (move.cost_a < move.cost_b) ? move.cost_a : move.cost_b;
+		if (move.cost_a < move.cost_b)
+			combined = move.cost_a;
+		else
+			combined = move.cost_b;
 		i = 0;
-		while (i++ < combined)
+		while (i < combined)
 		{
 			if (move.dir_a)
 				double_rotate(env, env->c);
 			else
 				double_reverse_rotate(env, env->c);
 			calculate_tail(env);
+			i++;
 		}
 		move.cost_a -= combined;
 		move.cost_b -= combined;
